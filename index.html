@@ -208,11 +208,6 @@
             width: 100%;
             margin: 10px 0;
         }
-
-        @page {
-            size: A4;
-            margin: 0;
-        }
     </style>
 </head>
 
@@ -274,6 +269,7 @@
                     const img = document.getElementById('frontPreview');
                     img.src = event.target.result;
                     img.onload = function () {
+                        // Ensure image fits perfectly
                         fitImage(img);
                     };
                 };
@@ -289,6 +285,7 @@
                     const img = document.getElementById('backPreview');
                     img.src = event.target.result;
                     img.onload = function () {
+                        // Ensure image fits perfectly
                         fitImage(img);
                     };
                 };
@@ -296,6 +293,7 @@
             }
         });
 
+        // Function to ensure images fit perfectly in their containers
         function fitImage(imgElement) {
             const container = imgElement.parentElement;
             const containerRatio = container.offsetWidth / container.offsetHeight;
@@ -326,73 +324,7 @@
 
         // Print button handler
         document.getElementById('printBtn').addEventListener('click', function () {
-            // Create print window
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Print Document</title>
-                    <style>
-                        @page {
-                            size: A4;
-                            margin: 20mm;
-                        }
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            font-family: Arial;
-                        }
-                        .print-page {
-                            width: 210mm;
-                            height: 297mm;
-                            page-break-after: always;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                        .print-image-container {
-                            width: 160mm;
-                            height: 90mm;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            margin: 5mm 0;
-                            overflow: hidden;
-                            position: relative;
-                        }
-                        .print-image-container img {
-                            max-width: 100%;
-                            max-height: 100%;
-                            width: auto;
-                            height: auto;
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="print-page">
-                        <div class="print-image-container">
-                            <img src="${document.getElementById('frontPreview').src}">
-                        </div>
-                        <div class="print-image-container">
-                            <img src="${document.getElementById('backPreview').src}">
-                        </div>
-                    </div>
-                    <script>
-                        setTimeout(function() {
-                            window.print();
-                            window.close();
-                        }, 200);
-                    <\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
+            window.print();
         });
 
         // Close preview button
@@ -414,7 +346,9 @@
             if (e.ctrlKey && e.key === 'p') {
                 if (document.getElementById('previewContainer').style.display === 'block') {
                     e.preventDefault();
-                    document.getElementById('printBtn').click();
+                    setTimeout(function () {
+                        window.print();
+                    }, 100);
                 }
             }
         });
