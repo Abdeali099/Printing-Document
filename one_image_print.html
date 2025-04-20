@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 Image Print</title>
+    <link rel="icon" type="image/png" href="./one_icon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./one_icon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./one_icon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./one_icon/android-chrome-512x512.png">
+
+    <link rel="manifest" href="./one_iconsite.webmanifest" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .upload-box {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .preview-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .preview-page {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20mm;
+            box-sizing: border-box;
+        }
+        .preview-image-container {
+            max-width: 170mm; /* 210mm - 40mm padding */
+            max-height: 257mm; /* 297mm - 40mm padding */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .preview-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: block;
+        }
+        .preview-actions {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0b7dda;
+        }
+        button.secondary {
+            background-color: #f44336;
+        }
+        button.secondary:hover {
+            background-color: #d32f2f;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .preview-page, .preview-page * {
+                visibility: visible;
+            }
+            .preview-page {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 20mm;
+                box-shadow: none;
+            }
+            .preview-actions, .upload-box, .container > h1 {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Single Image Printing Tool</h1>
+        
+        <div class="upload-box">
+            <h3>Upload Image</h3>
+            <input type="file" id="imageUpload" accept="image/*">
+            <p>Select an image to print</p>
+        </div>
+
+        <div class="preview-container" id="previewContainer">
+            <div class="preview-page">
+                <div class="preview-image-container">
+                    <img id="imagePreview" src="" alt="">
+                </div>
+            </div>
+            <div class="preview-actions">
+                <button id="printBtn">Print Document</button>
+                <button id="closePreview" class="secondary">Close Preview</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Upload image handler
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('imagePreview');
+                    img.src = event.target.result;
+                    img.onload = function() {
+                        document.getElementById('previewContainer').style.display = 'block';
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Print button handler
+        document.getElementById('printBtn').addEventListener('click', function() {
+            window.print();
+        });
+
+        // Close preview button
+        document.getElementById('closePreview').addEventListener('click', function() {
+            document.getElementById('previewContainer').style.display = 'none';
+        });
+
+        // Print when Ctrl+P is pressed (for desktop)
+        window.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                if (document.getElementById('previewContainer').style.display === 'block') {
+                    e.preventDefault();
+                    setTimeout(function() {
+                        window.print();
+                    }, 100);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
