@@ -388,39 +388,37 @@
                             window.print();
                             window.close();
                         }, 200);
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        });
+
+        // Close preview button
+        document.getElementById('closePreview').addEventListener('click', function () {
+            document.getElementById('previewContainer').style.display = 'none';
+        });
+
+        // Reset button handler
+        document.getElementById('resetBtn').addEventListener('click', function () {
+            document.getElementById('frontUpload').value = '';
+            document.getElementById('backUpload').value = '';
+            document.getElementById('frontPreview').src = '';
+            document.getElementById('backPreview').src = '';
+            document.getElementById('previewContainer').style.display = 'none';
+        });
+
+        // Print when Ctrl+P is pressed (for desktop)
+        window.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && e.key === 'p') {
+                if (document.getElementById('previewContainer').style.display === 'block') {
+                    e.preventDefault();
+                    document.getElementById('printBtn').click();
+                }
+            }
+        });
     </script>
-</body>
-
-</html>
-`);
-
-printWindow.document.close();
-});
-
-// Close preview button
-document.getElementById('closePreview').addEventListener('click', function() {
-document.getElementById('previewContainer').style.display = 'none';
-});
-
-// Reset button handler
-document.getElementById('resetBtn').addEventListener('click', function() {
-document.getElementById('frontUpload').value = '';
-document.getElementById('backUpload').value = '';
-document.getElementById('frontPreview').src = '';
-document.getElementById('backPreview').src = '';
-document.getElementById('previewContainer').style.display = 'none';
-});
-
-// Print when Ctrl+P is pressed (for desktop)
-window.addEventListener('keydown', function(e) {
-if (e.ctrlKey && e.key === 'p') {
-if (document.getElementById('previewContainer').style.display === 'block') {
-e.preventDefault();
-document.getElementById('printBtn').click();
-}
-}
-});
-</script>
 </body>
 
 </html>
